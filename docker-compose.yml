@@ -1,0 +1,19 @@
+version: '3'
+services:
+  # 使用 Dockerfile 直接 build , service name 叫做 web, 依賴於 redis service
+  web:
+    build: .
+    depends_on:
+      - redis
+  # redis service, 使用 alpine 代表最簡化的版本
+  redis:
+    image: "redis:alpine"
+  # nginx service, 使用 alpine 代表最簡化的版本, 依賴於 web 這個 service ( node )
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - web
